@@ -1,0 +1,29 @@
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 0000
+@score_param.txt
+
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 1111
+@score_param.txt
+
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 2222
+@score_param.txt
+
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 3333
+@score_param.txt
+
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 4444
+@score_param.txt
+
+POST http://localhost:8080/game/finish
+Content-Type: application/json
+x-token: 5555
+@score_param.txt

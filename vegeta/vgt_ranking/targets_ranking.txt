@@ -1,0 +1,23 @@
+GET http://localhost:8080/ranking/list?start=1
+Content-Type: application/json
+x-token: 0000
+
+GET http://localhost:8080/ranking/list?start=2
+Content-Type: application/json
+x-token: 1111
+
+GET http://localhost:8080/ranking/list?start=3
+Content-Type: application/json
+x-token: 2222
+
+GET http://localhost:8080/ranking/list?start=4
+Content-Type: application/json
+x-token: 3333
+
+GET http://localhost:8080/ranking/list?start=5
+Content-Type: application/json
+x-token: 4444
+
+GET http://localhost:8080/ranking/list?start=6
+Content-Type: application/json
+x-token: 5555
