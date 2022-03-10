@@ -99,7 +99,7 @@ func GetCollectionItemsByID(idList []string) ([]*Collection, error) {
 	return collections, nil
 }
 
-func BulkInsertUserCollectionItemWithTx(tx *sql.Tx, userID string, idList []string) error {
+func BulkCreateUserCollectionItemWithTx(tx *sql.Tx, userID string, idList []string) error {
 	valueStrings := make([]string, 0, len(idList))
 	valueArgs := make([]interface{}, 0, len(idList)*2)
 	for _, ID := range idList {

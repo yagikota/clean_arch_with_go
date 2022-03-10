@@ -102,7 +102,7 @@ func HandleGachaDraw() http.HandlerFunc {
 
 			// 出現したitemのうちHasItemがfalseのものだけ、user_collection_itemにINSERT
 			if len(newCollectionIDList) > 0 {
-				err = model.BulkInsertUserCollectionItemWithTx(tx, userID, newCollectionIDList)
+				err = model.BulkCreateUserCollectionItemWithTx(tx, userID, newCollectionIDList)
 				if err != nil {
 					return err
 				}

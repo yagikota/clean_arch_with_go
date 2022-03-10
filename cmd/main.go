@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"22dojo-online/pkg/server"
+	"22dojo-online/pkg/adapter/server"
 )
 
 var (

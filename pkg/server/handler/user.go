@@ -42,7 +42,7 @@ func HandleUserCreate() http.HandlerFunc {
 
 		// データベースにユーザデータを登録する
 		// TODO: ユーザデータの登録クエリを入力する
-		err = model.InsertUser(&model.User{
+		err = model.CreateUser(&model.User{
 			ID:        userID.String(),
 			AuthToken: authToken.String(),
 			Name:      requestBody.Name,
