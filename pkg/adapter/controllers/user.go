@@ -1,24 +1,26 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+
 	"22dojo-online/pkg/dcontext"
 	"22dojo-online/pkg/http/response"
 	interactor "22dojo-online/pkg/usecase/Interactor"
 	inputdata "22dojo-online/pkg/usecase/input_data"
 	outputdata "22dojo-online/pkg/usecase/output_data"
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
 )
-
 
 type UserController struct {
 	Interactor interactor.UserInteractor
 }
 
 func NewUserController(userInteractor interactor.UserInteractor) *UserController {
-	return &UserController{Interactor: userInteractor}
+	return &UserController{
+		Interactor: userInteractor,
+	}
 }
 
 func (controller *UserController) HandleUserCreate() http.HandlerFunc {
@@ -43,6 +45,7 @@ func (controller *UserController) HandleUserCreate() http.HandlerFunc {
 
 func (controller *UserController) HandleUserGet() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
+		log.Println("user get")
 		ctx := request.Context()
 		userID := dcontext.GetUserIDFromContext(ctx)
 		if userID == "" {
@@ -88,7 +91,7 @@ func (controller *UserController) HandleUserUpdate() http.HandlerFunc {
 			return
 		}
 
-		if err := controller.Interactor.UpdateUserByPrimaryKey(requestBody ,userID); err != nil {
+		if err := controller.Interactor.UpdateUserByPrimaryKey(requestBody, userID); err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
 			return

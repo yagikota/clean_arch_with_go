@@ -1,17 +1,14 @@
 package interactor
 
 import (
-	"22dojo-online/pkg/domain/model"
-	"22dojo-online/pkg/domain/repository"
-	"22dojo-online/pkg/usecase/input_data"
 	"errors"
 
 	"github.com/google/uuid"
-)
 
-type userInteractor struct {
-	userRepository repository.UserRepository
-}
+	"22dojo-online/pkg/domain/model"
+	"22dojo-online/pkg/domain/repository"
+	inputdata "22dojo-online/pkg/usecase/input_data"
+)
 
 type UserInteractor interface {
 	CreateUser(inputdata.UserCreateRequest) (string, error)
@@ -19,6 +16,11 @@ type UserInteractor interface {
 	SelectUserByPrimaryKey(string) (*model.User, error)
 	UpdateUserByPrimaryKey(inputdata.UserUpdateRequest, string) error
 }
+
+type userInteractor struct {
+	userRepository repository.UserRepository
+}
+
 
 func NewUserInteractor(userRepository repository.UserRepository) UserInteractor {
 	return &userInteractor{userRepository: userRepository}

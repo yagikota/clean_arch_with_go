@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"22dojo-online/pkg/adapter/server"
+	"22dojo-online/pkg/infrastructure/server"
 )
 
 var (
@@ -11,6 +11,7 @@ var (
 	addr string
 )
 
+// https://www.spinute.org/go-by-example/command-line-flags.html
 func init() {
 	flag.StringVar(&addr, "addr", ":8080", "tcp host:port to connect")
 	flag.Parse()

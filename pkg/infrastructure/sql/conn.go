@@ -1,9 +1,8 @@
-package db
+package infrasql
 
 // DB接続には、外部パッケージを使用しているので、infrastructure層に定義し外側のルールを内側に持ち込まないようにします。
 
 import (
-	"22dojo-online/pkg/adapter/db"
 	"context"
 	"database/sql"
 	"fmt"
@@ -12,6 +11,8 @@ import (
 
 	// blank import for MySQL driver
 	_ "github.com/go-sql-driver/mysql"
+
+	"22dojo-online/pkg/adapter/db"
 )
 
 // Driver名
@@ -19,11 +20,11 @@ const driverName = "mysql"
 
 // Conn 各repositoryで利用するDB接続(Connection)情報
 // var Conn *sql.DB
-type SqlHandler struct {
+type SQLHandler struct {
 	Conn *sql.DB
 }
 
-func NewSqlHandler() *SqlHandler {
+func NewSQLHandler() *SQLHandler {
 	/* ===== データベースへ接続する. ===== */
 	// ユーザ
 	user := os.Getenv("MYSQL_USER")
@@ -52,16 +53,16 @@ func NewSqlHandler() *SqlHandler {
 			"MYSQL_DATABASE=%s, "+
 			"error=%+v",
 			user, password, host, port, database, err)
-		}
+	}
 
-	return &SqlHandler{
+	return &SQLHandler{
 		Conn: conn,
 	}
 }
 
-	func (handler *SqlHandler) Exec(query string, args ...interface{}) (db.Result, error) {
-		res := SqlResult{}
-		result, err := handler.Conn.Exec(query, args...)
+func (handler *SQLHandler) Exec(query string, args ...interface{}) (db.Result, error) {
+	res := SQLResult{}
+	result, err := handler.Conn.Exec(query, args...)
 	if err != nil {
 		return res, err
 	}
@@ -69,31 +70,31 @@ func NewSqlHandler() *SqlHandler {
 	return res, nil
 }
 
-func (handler *SqlHandler) QueryRow(query string, args ...interface{}) db.Row {
-    return handler.Conn.QueryRow(query, args...)
+func (handler *SQLHandler) QueryRow(query string, args ...interface{}) db.Row {
+	return handler.Conn.QueryRow(query, args...)
 }
 
-type SqlResult struct {
+type SQLResult struct {
 	Result sql.Result
 }
 
-func (r SqlResult) LastInsertId() (int64, error) {
-    return r.Result.LastInsertId()
+func (r SQLResult) LastInsertId() (int64, error) {
+	return r.Result.LastInsertId()
 }
 
-func (r SqlResult) RowsAffected() (int64, error) {
+func (r SQLResult) RowsAffected() (int64, error) {
 	return r.Result.RowsAffected()
 }
 
-type SqlRow struct {
+type SQLRow struct {
 	Row *sql.Row
 }
 
-func (r SqlRow) Scan(dest ...interface{}) error {
+func (r SQLRow) Scan(dest ...interface{}) error {
 	return r.Row.Scan(dest...)
 }
 
-func (r SqlRow) Err() error {
+func (r SQLRow) Err() error {
 	return r.Row.Err()
 }
 

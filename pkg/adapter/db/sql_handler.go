@@ -2,7 +2,7 @@ package db
 
 // pkg/infrastructure/sql/conn.goを直接参照させないDIP（依存関係逆転の原則）
 
-type SqlHandler interface {
+type SQLHandler interface {
 	Exec(string, ...interface{}) (Result, error)
 	QueryRow(string, ...interface{}) Row
 }

@@ -10,18 +10,14 @@ import (
 )
 
 type UserRepository struct {
-	SqlHandler
+	SQLHandler
 }
 
-
-// User userテーブルデータ
-// type User struct {
-// 	ID        string
-// 	AuthToken string
-// 	Name      string
-// 	HighScore int32
-// 	Coin      int32
-// }
+func NewUserRepository(sqlHandler SQLHandler) *UserRepository {
+	return &UserRepository{
+		SQLHandler: sqlHandler,
+	}
+}
 
 // CreateUser データベースをレコードを登録する
 func (repo *UserRepository) CreateUser(record *model.User) error {
