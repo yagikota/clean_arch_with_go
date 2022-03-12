@@ -16,6 +16,7 @@ services:
       - db-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "ca-tech-dojo"
+      
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
