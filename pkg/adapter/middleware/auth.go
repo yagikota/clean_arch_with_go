@@ -10,18 +10,22 @@ import (
 	interactor "22dojo-online/pkg/usecase/Interactor"
 )
 
-type AuthController struct {
+type AuthController interface {
+	Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc
+}
+
+type authController struct {
 	Interactor interactor.UserInteractor
 }
 
-func NewAuthController(userInteractor interactor.UserInteractor) *AuthController {
-	return &AuthController{
+func NewAuthController(userInteractor interactor.UserInteractor) AuthController {
+	return &authController{
 		Interactor: userInteractor,
 	}
 }
 
 // Authenticate ユーザ認証を行ってContextへユーザID情報を保存する
-func (auth *AuthController) Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc {
+func (auth *authController) Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		ctx := request.Context()
 		if ctx == nil {

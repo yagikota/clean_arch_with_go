@@ -13,17 +13,23 @@ import (
 	outputdata "22dojo-online/pkg/usecase/output_data"
 )
 
-type UserController struct {
+type UserController interface {
+	HandleUserCreate() http.HandlerFunc
+	HandleUserGet() http.HandlerFunc
+	HandleUserUpdate() http.HandlerFunc
+}
+
+type userController struct {
 	Interactor interactor.UserInteractor
 }
 
-func NewUserController(userInteractor interactor.UserInteractor) *UserController {
-	return &UserController{
+func NewUserController(userInteractor interactor.UserInteractor) UserController {
+	return &userController{
 		Interactor: userInteractor,
 	}
 }
 
-func (controller *UserController) HandleUserCreate() http.HandlerFunc {
+func (controller *userController) HandleUserCreate() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		// TODO: interfaceにしたい
 		var requestBody inputdata.UserCreateRequest
@@ -43,7 +49,7 @@ func (controller *UserController) HandleUserCreate() http.HandlerFunc {
 	}
 }
 
-func (controller *UserController) HandleUserGet() http.HandlerFunc {
+func (controller *userController) HandleUserGet() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		log.Println("user get")
 		ctx := request.Context()
@@ -73,7 +79,7 @@ func (controller *UserController) HandleUserGet() http.HandlerFunc {
 	}
 }
 
-func (controller *UserController) HandleUserUpdate() http.HandlerFunc {
+func (controller *userController) HandleUserUpdate() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		var requestBody inputdata.UserUpdateRequest
 		if err := json.NewDecoder(request.Body).Decode(&requestBody); err != nil {

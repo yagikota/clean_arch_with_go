@@ -11,11 +11,12 @@ import (
 )
 
 // TODO: go wireなどで自動生成
+// 依存するオブジェクトを注入
 func InjectDB() *infrasql.SQLHandler {
 	return infrasql.NewSQLHandler()
 }
 
-// TODO: ?
+// TODO: 実装方法?
 func injectUserRepository() repository.UserRepository {
 	return db.NewUserRepository(InjectDB())
 }
@@ -29,9 +30,9 @@ func injectUserInteractor() interactor.UserInteractor {
 }
 
 func InjectUserController() controllers.UserController {
-	return *controllers.NewUserController(injectUserInteractor())
+	return controllers.NewUserController(injectUserInteractor())
 }
 
 func InjectAuthController() middleware.AuthController {
-	return *middleware.NewAuthController(injectUserInteractor())
+	return middleware.NewAuthController(injectUserInteractor())
 }
