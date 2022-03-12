@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 
 	"22dojo-online/pkg/domain/model"
-	"22dojo-online/pkg/domain/repository"
+	"22dojo-online/pkg/domain/service"
 	inputdata "22dojo-online/pkg/usecase/input_data"
 )
 
@@ -18,12 +18,13 @@ type UserInteractor interface {
 }
 
 type userInteractor struct {
-	userRepository repository.UserRepository
+	userService service.UserService
 }
 
-
-func NewUserInteractor(userRepository repository.UserRepository) UserInteractor {
-	return &userInteractor{userRepository: userRepository}
+func NewUserInteractor(userService service.UserService) UserInteractor {
+	return &userInteractor{
+		userService: userService,
+	}
 }
 
 func (ui *userInteractor) CreateUser(requestBody inputdata.UserCreateRequest) (string, error) {
@@ -47,7 +48,7 @@ func (ui *userInteractor) CreateUser(requestBody inputdata.UserCreateRequest) (s
 		HighScore: 0,
 		Coin:      0,
 	}
-	if err := ui.userRepository.CreateUser(user); err != nil {
+	if err := ui.userService.CreateUser(user); err != nil {
 		return "", err
 	}
 
@@ -56,15 +57,15 @@ func (ui *userInteractor) CreateUser(requestBody inputdata.UserCreateRequest) (s
 }
 
 func (ui *userInteractor) SelectUserByPrimaryKey(userID string) (*model.User, error) {
-	return ui.userRepository.SelectUserByPrimaryKey(userID)
+	return ui.userService.SelectUserByPrimaryKey(userID)
 }
 
 func (ui *userInteractor) SelectUserByAuthToken(authToken string) (*model.User, error) {
-	return ui.userRepository.SelectUserByAuthToken(authToken)
+	return ui.userService.SelectUserByAuthToken(authToken)
 }
 
 func (ui *userInteractor) UpdateUserByPrimaryKey(requestBody inputdata.UserUpdateRequest, userID string) error {
-	user, err := ui.userRepository.SelectUserByPrimaryKey(userID)
+	user, err := ui.userService.SelectUserByPrimaryKey(userID)
 	if err != nil {
 		return err
 	}
@@ -73,5 +74,5 @@ func (ui *userInteractor) UpdateUserByPrimaryKey(requestBody inputdata.UserUpdat
 	}
 
 	user.Name = requestBody.Name
-	return ui.userRepository.UpdateUserByPrimaryKey(user)
+	return ui.userService.UpdateUserByPrimaryKey(user)
 }

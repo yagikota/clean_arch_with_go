@@ -9,6 +9,7 @@ import (
 	"22dojo-online/pkg/adapter/controllers"
 	"22dojo-online/pkg/adapter/db"
 	"22dojo-online/pkg/adapter/middleware"
+	"22dojo-online/pkg/domain/service"
 	infrasql "22dojo-online/pkg/infrastructure/sql"
 	interactor "22dojo-online/pkg/usecase/Interactor"
 )
@@ -16,13 +17,14 @@ import (
 // Serve HTTPサーバを起動する
 func Serve(addr string) {
 	rand.Seed(time.Now().UnixNano())
+
 	// 依存性の注入(Constructor Injection)
 	sqlHandler := infrasql.NewSQLHandler()
-	// userRepo := db.NewUserRepository(sqlHandler)
 	userRepo := db.NewUserRepository(sqlHandler)
-	userInteractor := interactor.NewUserInteractor(userRepo)
+	suerService := service.NewUserService(userRepo)
+	userInteractor := interactor.NewUserInteractor(suerService)
 	userController := controllers.NewUserController(userInteractor)
-	
+
 	// userController := controllers.NewUserController(&db.NewSQLHandler())
 	// http.HandleFunc("/setting/get", get(controllers.HandleSettingGet()))
 	http.HandleFunc("/user/create", post(userController.HandleUserCreate()))
@@ -84,22 +86,22 @@ func httpMethod(apiFunc http.HandlerFunc, method string) http.HandlerFunc {
 	}
 }
 
-func InjectDB() *db.DBHandler {
-	return db.NewDBHandler()
-}
+// func InjectDB() *db.DBHandler {
+// 	return db.NewDBHandler()
+// }
 
-func injectUserRepository() repository.UserRepository {
-	return mysqlhandler.NewUserRepository(InjectDB())
-}
+// func injectUserRepository() repository.UserRepository {
+// 	return mysqlhandler.NewUserRepository(InjectDB())
+// }
 
-func injectUserService() service.UserService {
-	return service.NewUserService(injectUserRepository())
-}
+// func injectUserService() service.UserService {
+// 	return service.NewUserService(injectUserRepository())
+// }
 
-func injectUserInteractor() interactor.UserInteractor {
-	return interactor.NewUserInteractor(injectUserService())
-}
+// func injectUserInteractor() interactor.UserInteractor {
+// 	return interactor.NewUserInteractor(injectUserService())
+// }
 
-func injectUserHandler() usecasehandler.UserHandler {
-	return usecasehandler.NewUserHandler(injectUserInteractor())
-}
+// func injectUserHandler() usecasehandler.UserHandler {
+// 	return usecasehandler.NewUserHandler(injectUserInteractor())
+// }
