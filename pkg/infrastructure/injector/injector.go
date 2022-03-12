@@ -15,7 +15,7 @@ func InjectDB() *infrasql.SQLHandler {
 	return infrasql.NewSQLHandler()
 }
 
-// TODO: レポジトリがinfradbに依存?
+// TODO: ?
 func injectUserRepository() repository.UserRepository {
 	return db.NewUserRepository(InjectDB())
 }
