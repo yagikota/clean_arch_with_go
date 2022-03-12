@@ -5,13 +5,23 @@ import (
 	"log"
 	"net/http"
 
-	"22dojo-online/pkg/dcontext"
-	"22dojo-online/pkg/http/response"
-	"22dojo-online/pkg/server/model"
+	"22dojo-online/pkg/adapter/dcontext"
+	"22dojo-online/pkg/adapter/response"
+	interactor "22dojo-online/pkg/usecase/Interactor"
 )
 
+type AuthController struct {
+	Interactor interactor.UserInteractor
+}
+
+func NewAuthController(userInteractor interactor.UserInteractor) *AuthController {
+	return &AuthController{
+		Interactor: userInteractor,
+	}
+}
+
 // Authenticate ユーザ認証を行ってContextへユーザID情報を保存する
-func Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc {
+func (auth *AuthController) Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		ctx := request.Context()
 		if ctx == nil {
@@ -26,7 +36,7 @@ func Authenticate(nextFunc http.HandlerFunc) http.HandlerFunc {
 		}
 
 		// TODO: データベースから認証トークンに紐づくユーザの情報を取得
-		user, err := model.SelectUserByAuthToken(token)
+		user, err := auth.Interactor.SelectUserByAuthToken(token)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Invalid token")

@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"22dojo-online/pkg/dcontext"
-	"22dojo-online/pkg/http/response"
+	"22dojo-online/pkg/adapter/dcontext"
+	"22dojo-online/pkg/adapter/response"
 	interactor "22dojo-online/pkg/usecase/Interactor"
 	inputdata "22dojo-online/pkg/usecase/input_data"
 	outputdata "22dojo-online/pkg/usecase/output_data"
