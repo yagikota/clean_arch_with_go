@@ -21,6 +21,7 @@ type userRepository struct {
 	SQLHandler
 }
 
+// TODO: repository.UserRepositoryでいいのか
 func NewUserRepository(sqlHandler SQLHandler) repository.UserRepository {
 	return &userRepository{
 		SQLHandler: sqlHandler,

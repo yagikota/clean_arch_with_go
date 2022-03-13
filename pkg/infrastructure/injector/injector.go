@@ -17,6 +17,7 @@ func InjectDB() *infrasql.SQLHandler {
 }
 
 // TODO: 実装方法?
+// User系======================================================
 func injectUserRepository() repository.UserRepository {
 	return db.NewUserRepository(InjectDB())
 }
@@ -33,6 +34,32 @@ func InjectUserController() controllers.UserController {
 	return controllers.NewUserController(injectUserInteractor())
 }
 
+// User系======================================================
+
+// Auth系======================================================
 func InjectAuthController() middleware.AuthController {
 	return middleware.NewAuthController(injectUserInteractor())
 }
+
+// Auth系======================================================
+
+// Setting系===================================================
+// TODO: これでいいのか
+func injectSettingRepository() repository.SettingRepository {
+	var tmpRepo repository.SettingRepository
+	return tmpRepo
+}
+
+func injectSettingService() service.SettingService {
+	return service.NewSettingService(injectSettingRepository())
+}
+
+func injectSettingInteractor() interactor.SettingrInteractor {
+	return interactor.NewSettingInteractor(injectSettingService())
+}
+
+func InjectSettingController() controllers.SettingController {
+	return controllers.NewSettingController(injectSettingInteractor())
+}
+
+// Setting系===================================================

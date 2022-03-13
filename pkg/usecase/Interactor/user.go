@@ -18,12 +18,12 @@ type UserInteractor interface {
 }
 
 type userInteractor struct {
-	userService service.UserService
+	Service service.UserService
 }
 
 func NewUserInteractor(userService service.UserService) UserInteractor {
 	return &userInteractor{
-		userService: userService,
+		Service: userService,
 	}
 }
 
@@ -48,7 +48,7 @@ func (ui *userInteractor) CreateUser(requestBody inputdata.UserCreateRequest) (s
 		HighScore: 0,
 		Coin:      0,
 	}
-	if err := ui.userService.CreateUser(user); err != nil {
+	if err := ui.Service.CreateUser(user); err != nil {
 		return "", err
 	}
 
@@ -57,15 +57,15 @@ func (ui *userInteractor) CreateUser(requestBody inputdata.UserCreateRequest) (s
 }
 
 func (ui *userInteractor) SelectUserByPrimaryKey(userID string) (*model.User, error) {
-	return ui.userService.SelectUserByPrimaryKey(userID)
+	return ui.Service.SelectUserByPrimaryKey(userID)
 }
 
 func (ui *userInteractor) SelectUserByAuthToken(authToken string) (*model.User, error) {
-	return ui.userService.SelectUserByAuthToken(authToken)
+	return ui.Service.SelectUserByAuthToken(authToken)
 }
 
 func (ui *userInteractor) UpdateUserByPrimaryKey(requestBody inputdata.UserUpdateRequest, userID string) error {
-	user, err := ui.userService.SelectUserByPrimaryKey(userID)
+	user, err := ui.Service.SelectUserByPrimaryKey(userID)
 	if err != nil {
 		return err
 	}
@@ -74,5 +74,5 @@ func (ui *userInteractor) UpdateUserByPrimaryKey(requestBody inputdata.UserUpdat
 	}
 
 	user.Name = requestBody.Name
-	return ui.userService.UpdateUserByPrimaryKey(user)
+	return ui.Service.UpdateUserByPrimaryKey(user)
 }

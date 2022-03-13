@@ -20,29 +20,29 @@ type UserService interface {
 }
 
 type userService struct {
-	userRepository repository.UserRepository
+	Repository repository.UserRepository
 }
 
 func NewUserService(userRepository repository.UserRepository) UserService {
 	return &userService{
-		userRepository: userRepository,
+		Repository: userRepository,
 	}
 }
 
 func (us *userService) CreateUser(record *model.User) error {
-	return us.userRepository.CreateUser(record)
+	return us.Repository.CreateUser(record)
 }
 
 func (us *userService) SelectUserByAuthToken(authToken string) (*model.User, error) {
-	user, err := us.userRepository.SelectUserByAuthToken(authToken)
+	user, err := us.Repository.SelectUserByAuthToken(authToken)
 	return user, err
 }
 
 func (us *userService) SelectUserByPrimaryKey(userID string) (*model.User, error) {
-	user, err := us.userRepository.SelectUserByPrimaryKey(userID)
+	user, err := us.Repository.SelectUserByPrimaryKey(userID)
 	return user, err
 }
 
 func (us *userService) UpdateUserByPrimaryKey(record *model.User) error {
-	return us.userRepository.UpdateUserByPrimaryKey(record)
+	return us.Repository.UpdateUserByPrimaryKey(record)
 }

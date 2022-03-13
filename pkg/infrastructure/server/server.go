@@ -15,8 +15,9 @@ func Serve(addr string) {
 
 	authController := injector.InjectAuthController()
 	userController := injector.InjectUserController()
+	settingController := injector.InjectSettingController()
 
-	// http.HandleFunc("/setting/get", get(controllers.HandleSettingGet()))
+	http.HandleFunc("/setting/get", get(settingController.HandleSettingGet()))
 	http.HandleFunc("/user/create", post(userController.HandleUserCreate()))
 	http.HandleFunc("/user/get",
 		get(authController.Authenticate(userController.HandleUserGet())))
