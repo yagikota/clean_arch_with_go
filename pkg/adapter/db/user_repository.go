@@ -21,7 +21,7 @@ type userRepository struct {
 	SQLHandler
 }
 
-// TODO: repository.UserRepositoryでいいのか
+// TODO: repository.UserRepositoryでいいのか。このファイルでinterface定義するべきか？
 func NewUserRepository(sqlHandler SQLHandler) repository.UserRepository {
 	return &userRepository{
 		SQLHandler: sqlHandler,
