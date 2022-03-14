@@ -70,6 +70,11 @@ func (handler *SQLHandler) Exec(query string, args ...interface{}) (db.Result, e
 	return res, nil
 }
 
+//nolint: rowserrcheck // this is why
+func (handler *SQLHandler) Query(query string, args ...interface{}) (db.Rows, error) {
+	return handler.Conn.Query(query, args...)
+}
+
 func (handler *SQLHandler) QueryRow(query string, args ...interface{}) db.Row {
 	return handler.Conn.QueryRow(query, args...)
 }
@@ -90,12 +95,32 @@ type SQLRow struct {
 	Row *sql.Row
 }
 
+func (r SQLRow) Err() error {
+	return r.Row.Err()
+}
+
 func (r SQLRow) Scan(dest ...interface{}) error {
 	return r.Row.Scan(dest...)
 }
 
-func (r SQLRow) Err() error {
-	return r.Row.Err()
+type SQLRows struct {
+	Rows *sql.Rows
+}
+
+func (r SQLRows) Close() error {
+	return r.Rows.Close()
+}
+
+func (r SQLRows) Err() error {
+	return r.Rows.Err()
+}
+
+func (r SQLRows) Next() bool {
+	return r.Rows.Next()
+}
+
+func (r SQLRows) Scan(dest ...interface{}) error {
+	return r.Rows.Scan(dest...)
 }
 
 // トランザクションのWrapper

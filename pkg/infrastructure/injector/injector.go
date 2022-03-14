@@ -62,4 +62,19 @@ func InjectSettingController() controllers.SettingController {
 	return controllers.NewSettingController(injectSettingInteractor())
 }
 
-// Setting系===================================================
+// Collection系===================================================
+func injectCollectionRepository() repository.CollectionRepository {
+	return db.NewCollectionRepository(InjectDB())
+}
+
+func injectCollectionService() service.CollectionService {
+	return service.NewCollectionService(injectCollectionRepository())
+}
+
+func injectCollectionInteractor() interactor.CollectionInteractor {
+	return interactor.NewCollectionInteractor(injectCollectionService())
+}
+
+func InjectCollectionController() controllers.CollectionController {
+	return controllers.NewCollectionController(injectCollectionInteractor())
+}
