@@ -13,17 +13,23 @@ import (
 	outputdata "22dojo-online/pkg/usecase/output_data"
 )
 
-type UserController struct {
+type UserController interface {
+	HandleUserCreate() http.HandlerFunc
+	HandleUserGet() http.HandlerFunc
+	HandleUserUpdate() http.HandlerFunc
+}
+
+type userController struct {
 	Interactor interactor.UserInteractor
 }
 
-func NewUserController(userInteractor interactor.UserInteractor) *UserController {
-	return &UserController{
+func NewUserController(userInteractor interactor.UserInteractor) UserController {
+	return &userController{
 		Interactor: userInteractor,
 	}
 }
 
-func (controller *UserController) HandleUserCreate() http.HandlerFunc {
+func (uc *userController) HandleUserCreate() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		// TODO: interfaceにしたい
 		var requestBody inputdata.UserCreateRequest
@@ -33,7 +39,7 @@ func (controller *UserController) HandleUserCreate() http.HandlerFunc {
 			return
 		}
 
-		authToken, err := controller.Interactor.CreateUser(requestBody)
+		authToken, err := uc.Interactor.CreateUser(requestBody)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
@@ -43,7 +49,7 @@ func (controller *UserController) HandleUserCreate() http.HandlerFunc {
 	}
 }
 
-func (controller *UserController) HandleUserGet() http.HandlerFunc {
+func (uc *userController) HandleUserGet() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		log.Println("user get")
 		ctx := request.Context()
@@ -53,7 +59,7 @@ func (controller *UserController) HandleUserGet() http.HandlerFunc {
 			response.BadRequest(writer, "userID is empty")
 			return
 		}
-		user, err := controller.Interactor.SelectUserByPrimaryKey(userID)
+		user, err := uc.Interactor.SelectUserByPrimaryKey(userID)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
@@ -73,7 +79,7 @@ func (controller *UserController) HandleUserGet() http.HandlerFunc {
 	}
 }
 
-func (controller *UserController) HandleUserUpdate() http.HandlerFunc {
+func (uc *userController) HandleUserUpdate() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		var requestBody inputdata.UserUpdateRequest
 		if err := json.NewDecoder(request.Body).Decode(&requestBody); err != nil {
@@ -91,7 +97,7 @@ func (controller *UserController) HandleUserUpdate() http.HandlerFunc {
 			return
 		}
 
-		if err := controller.Interactor.UpdateUserByPrimaryKey(requestBody, userID); err != nil {
+		if err := uc.Interactor.UpdateUserByPrimaryKey(requestBody, userID); err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
 			return

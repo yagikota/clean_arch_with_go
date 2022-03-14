@@ -15,8 +15,10 @@ func Serve(addr string) {
 
 	authController := injector.InjectAuthController()
 	userController := injector.InjectUserController()
+	settingController := injector.InjectSettingController()
+	collectionController := injector.InjectCollectionController()
 
-	// http.HandleFunc("/setting/get", get(controllers.HandleSettingGet()))
+	http.HandleFunc("/setting/get", get(settingController.HandleSettingGet()))
 	http.HandleFunc("/user/create", post(userController.HandleUserCreate()))
 	http.HandleFunc("/user/get",
 		get(authController.Authenticate(userController.HandleUserGet())))
@@ -28,8 +30,8 @@ func Serve(addr string) {
 
 	// http.HandleFunc("/ranking/list",
 	// 	get(middleware.Authenticate(controllers.HandleRankingList())))
-	// http.HandleFunc("/collection/list",
-	// 	get(middleware.Authenticate(controllers.HandleCollectionList())))
+	http.HandleFunc("/collection/list",
+		get(authController.Authenticate(collectionController.HandleCollectionList())))
 	// http.HandleFunc("/gacha/draw",
 	// 	post(middleware.Authenticate(controllers.HandleGachaDraw())))
 

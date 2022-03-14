@@ -8,7 +8,7 @@ import "22dojo-online/pkg/domain/model"
 // TODO: when transaction
 type UserRepository interface {
 	CreateUser(record *model.User) error
-	SelectUserByAuthToken(userID string) (*model.User, error)
+	SelectUserByAuthToken(authToken string) (*model.User, error)
 	SelectUserByPrimaryKey(userID string) (*model.User, error)
 	UpdateUserByPrimaryKey(user *model.User) error
 }

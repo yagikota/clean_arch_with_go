@@ -2,7 +2,7 @@ package constant
 
 const (
 	// ガチャ1回あたりのコイン消費量
-	GachaCoinConsumption = 10
+	GachaCoinConsumption = 50
 
 	// timesの上限100に設定(仮)
 	GachaTimesLimit = 100

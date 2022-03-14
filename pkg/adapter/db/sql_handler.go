@@ -4,6 +4,7 @@ package db
 
 type SQLHandler interface {
 	Exec(string, ...interface{}) (Result, error)
+	Query(query string, args ...interface{}) (Rows, error)
 	QueryRow(string, ...interface{}) Row
 }
 
@@ -14,6 +15,13 @@ type Result interface {
 }
 
 type Row interface {
-	Scan(...interface{}) error
 	Err() error
+	Scan(...interface{}) error
+}
+
+type Rows interface {
+	Close() error
+	Err() error
+	Next() bool
+	Scan(dest ...interface{}) error
 }
